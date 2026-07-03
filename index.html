@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nocturne Symphony — Orquesta Rítmica JR</title>
+  <title>JR Orquesta</title>
   <meta name="description" content="Nocturne Symphony ofrece experiencias orquestales de primer nivel. Conciertos en vivo, veladas privadas y eventos corporativos con la mejor música clásica contemporánea." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -254,6 +254,32 @@
       letter-spacing: -0.01em;
     }
     .nav-logo-text span { color: var(--primary); }
+    
+    /* Efecto tornasolado metálico en movimiento basado en los timbales/tarolas */
+    .iridescent-text {
+      background: linear-gradient(
+        to right,
+        #00f2ff 0%,
+        #007cff 15%,
+        #a100ff 30%,
+        #ff00a0 45%,
+        #ff7b00 65%,
+        #ffc800 80%,
+        #00f2ff 100%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: metallicShine 4s linear infinite;
+      text-shadow: 0 0 12px rgba(0, 242, 255, 0.15);
+      font-weight: 900;
+    }
+    
+    @keyframes metallicShine {
+      0% { background-position: 0% center; }
+      100% { background-position: -200% center; }
+    }
     .nav-links {
       display: flex;
       align-items: center;
@@ -575,7 +601,7 @@
   <nav role="navigation" aria-label="Navegación principal">
     <div class="container nav-inner">
       <a href="#" class="nav-logo" aria-label="Nocturne Symphony Inicio">
-        <span class="nav-logo-text">Orquesta Rítmica <span>JR</span></span>
+        <span class="nav-logo-text iridescent-text">Orquesta Rítmica JR</span>
       </a>
       <ul class="nav-links">
         <li><a href="#" class="active">Inicio</a></li>
@@ -597,7 +623,7 @@
     <div class="hero-content">
       <div class="label-caps hero-overline">✦ EXPERIENCIA MUSICAL PREMIUM</div>
       <h1 class="hero-title">
-        Pon le Ritmo y Elegancia a tu Evento con <span class="gold">Orquesta Rítmica JR</span>
+        Pon le Ritmo y Elegancia a tu Evento con <span class="iridescent-text">Orquesta Rítmica JR</span>
       </h1>
       <p class="hero-subtitle">
         Música en vivo, animación profesional y un show inolvidable diseñado para elevar tus celebraciones al siguiente nivel.
