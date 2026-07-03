@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nocturne Symphony — Orquesta Rítmica JR</title>
+  <meta name="description" content="Nocturne Symphony ofrece experiencias orquestales de primer nivel. Conciertos en vivo, veladas privadas y eventos corporativos con la mejor música clásica contemporánea." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== DESIGN SYSTEM TOKENS ===== */
+    :root {
+      --background: #111318;
+      --surface: #111318;
+      --surface-dim: #111318;
+      --surface-bright: #37393e;
+      --surface-container-lowest: #0c0e12;
+      --surface-container-low: #1a1c20;
+      --surface-container: #1e2024;
+      --surface-container-high: #282a2e;
+      --surface-container-highest: #333539;
+      --on-surface: #e2e2e8;
+      --on-surface-variant: #d0c5af;
+      --inverse-surface: #e2e2e8;
+      --inverse-on-surface: #2f3035;
+      --outline: #99907c;
+      --outline-variant: #4d4635;
+      --surface-tint: #e9c349;
+      --primary: #f2ca50;
+      --on-primary: #3c2f00;
+      --primary-container: #d4af37;
+      --on-primary-container: #554300;
+      --inverse-primary: #735c00;
+      --secondary: #ddfcff;
+      --on-secondary: #00363a;
+      --secondary-container: #00f1fe;
+      --on-secondary-container: #006a70;
+      --tertiary: #ffbdcb;
+      --on-tertiary: #66002c;
+      --tertiary-container: #ff92ae;
+      --on-tertiary-container: #8c0040;
+      --error: #ffb4ab;
+      --on-error: #690005;
+      --error-container: #93000a;
+      --on-error-container: #ffdad6;
+      --primary-fixed: #ffe088;
+      --primary-fixed-dim: #e9c349;
+      --on-primary-fixed: #241a00;
+      --on-primary-fixed-variant: #574500;
+      --secondary-fixed: #74f5ff;
+      --secondary-fixed-dim: #00dbe7;
+      --on-secondary-fixed: #002022;
+      --on-secondary-fixed-variant: #004f54;
+      --tertiary-fixed: #ffd9e0;
+      --tertiary-fixed-dim: #ffb1c3;
+      --on-tertiary-fixed: #3f0019;
+      --on-tertiary-fixed-variant: #8f0041;
+      --surface-variant: #333539;
+
+      /* Spacing */
+      --unit: 8px;
+      --container-max: 1280px;
+      --gutter: 24px;
+      --section-gap-desktop: 120px;
+      --section-gap-mobile: 64px;
+
+      /* Rounded */
+      --rounded-sm: 0.125rem;
+      --rounded: 0.25rem;
+      --rounded-md: 0.375rem;
+      --rounded-lg: 0.5rem;
+      --rounded-xl: 0.75rem;
+      --rounded-full: 9999px;
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    .display-lg {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 72px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .headline-lg {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .headline-md {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .body-lg { font-family: 'Hanken Grotesk', sans-serif; font-size: 18px; font-weight: 400; line-height: 1.6; }
+    .body-md { font-family: 'Hanken Grotesk', sans-serif; font-size: 16px; font-weight: 400; line-height: 1.6; }
+    .label-caps {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      border-radius: var(--rounded-sm);
+    }
+    .btn-primary {
+      background: var(--primary-container);
+      color: var(--on-primary);
+      box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    }
+    .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 24px 4px rgba(212, 175, 55, 0.3);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--on-surface);
+      border: 1px solid var(--outline);
+    }
+    .btn-ghost:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 16px 2px rgba(242, 202, 80, 0.15);
+    }
+    .btn-whatsapp {
+      background: #25D366;
+      color: #fff;
+      font-size: 15px;
+      padding: 16px 36px;
+      border-radius: var(--rounded-sm);
+      box-shadow: 0 4px 24px rgba(37, 211, 102, 0.25);
+    }
+    .btn-whatsapp:hover {
+      background: #20bc5a;
+      transform: scale(1.03);
+      box-shadow: 0 8px 32px rgba(37, 211, 102, 0.4);
+    }
+    .btn-whatsapp-float {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 1000;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #25D366;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .btn-whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.7); }
+
+    /* ===== CHIPS / TAGS ===== */
+    .chip {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: var(--rounded-full);
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .chip-gold { background: rgba(242,202,80,0.15); color: var(--primary); border: 1px solid rgba(242,202,80,0.3); }
+    .chip-cyan { background: rgba(0,241,254,0.12); color: var(--secondary-container); border: 1px solid rgba(0,241,254,0.3); }
+    .chip-magenta { background: rgba(255,146,174,0.12); color: var(--tertiary-container); border: 1px solid rgba(255,146,174,0.3); }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(17, 19, 24, 0.6);
+      border-bottom: 1px solid rgba(153, 144, 124, 0.15);
+      transition: background 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(12, 14, 18, 0.9);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-container);
+      border-radius: var(--rounded-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--on-surface);
+      letter-spacing: -0.01em;
+    }
+    .nav-logo-text span { color: var(--primary); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-links a.active { color: var(--on-surface); }
+    .nav-cta { display: flex; align-items: center; gap: 16px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--on-surface); border-radius: 2px; transition: 0.3s; }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('C:/Users/jhons/.gemini/antigravity/brain/7d8c7a5b-3848-4da3-a695-40df4fcb053d/orchestra_hero_1783104983577.jpg');
+      background-size: cover;
+      background-position: center center;
+      transform: scale(1.05);
+      animation: heroZoom 20s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom { from { transform: scale(1.05); } to { transform: scale(1.12); } }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(17, 19, 24, 0.4) 0%,
+        rgba(17, 19, 24, 0.6) 40%,
+        rgba(17, 19, 24, 0.9) 80%,
+        #111318 100%
+      );
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 120px 24px 80px;
+      max-width: 950px;
+    }
+    .hero-overline {
+      color: var(--primary);
+      margin-bottom: 24px;
+      display: inline-block;
+    }
+    .hero-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(38px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--on-surface);
+      margin-bottom: 24px;
+    }
+    .hero-title .gold { color: var(--primary); }
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--on-surface-variant);
+      max-width: 600px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ===== PACKAGES SECTION ===== */
+    .packages-section { background: var(--surface-container-lowest); padding: var(--section-gap-desktop) 0; }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-header h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--on-surface);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 12px;
+    }
+    .section-header h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--primary-container);
+    }
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .package-card {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      padding: 36px 28px;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .package-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    .package-card.popular {
+      border: 2px solid var(--primary-container);
+      background: var(--surface-container);
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+    }
+    .package-card.popular:hover {
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.25);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -14px;
+      right: 24px;
+      background: var(--primary-container);
+      color: var(--on-primary);
+      padding: 4px 12px;
+      border-radius: var(--rounded-sm);
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .package-icon-wrap {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .package-tier {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--on-surface-variant);
+      margin-bottom: 8px;
+    }
+    .package-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--on-surface);
+      margin-bottom: 24px;
+    }
+    .package-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+    .package-price {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .package-currency {
+      font-size: 16px;
+      color: var(--on-surface-variant);
+    }
+    .package-features {
+      list-style: none;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .package-features li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 15px;
+      color: var(--on-surface-variant);
+    }
+    .package-features li svg {
+      width: 18px;
+      height: 18px;
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .package-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ===== WHATSAPP BANNER SECTION ===== */
+    .whatsapp-banner {
+      background: linear-gradient(rgba(17, 19, 24, 0.95), rgba(17, 19, 24, 0.95)), url('C:/Users/jhons/.gemini/antigravity/brain/7d8c7a5b-3848-4da3-a695-40df4fcb053d/gallery_concert_hall_1783105002077.jpg');
+      background-size: cover;
+      background-position: center;
+      padding: 90px 0;
+      text-align: center;
+      border-top: 1px solid var(--outline-variant);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .whatsapp-banner h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .whatsapp-banner p {
+      color: var(--on-surface-variant);
+      max-width: 600px;
+      margin: 0 auto 36px;
+      font-size: 16px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--surface-container-lowest);
+      border-top: 1px solid var(--outline-variant);
+      padding: 80px 0 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.2fr;
+      gap: 64px;
+      margin-bottom: 64px;
+    }
+    .footer-desc {
+      color: var(--on-surface-variant);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 320px;
+      margin-top: 16px;
+    }
+    .footer-col-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--on-surface);
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .footer-links a {
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--primary); }
+    .social-icons {
+      display: flex;
+      gap: 16px;
+    }
+    .social-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .social-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--outline-variant);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--on-surface-variant);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .packages-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta .btn-ghost { display: none; }
+      .hamburger { display: flex; }
+      .packages-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 48px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav role="navigation" aria-label="Navegación principal">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo" aria-label="Nocturne Symphony Inicio">
+        <span class="nav-logo-text">Orquesta Rítmica <span>JR</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#" class="active">Inicio</a></li>
+        <li><a href="#paquetes">Paquetes</a></li>
+        <li><a href="#eventos">Eventos</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#paquetes" class="btn btn-primary">Reserva Ahora</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="inicio" aria-label="Sección principal">
+    <div class="hero-bg" role="img" aria-label="Orquesta sinfónica en escenario"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="label-caps hero-overline">✦ EXPERIENCIA MUSICAL PREMIUM</div>
+      <h1 class="hero-title">
+        Pon le Ritmo y Elegancia a tu Evento con <span class="gold">Orquesta Rítmica JR</span>
+      </h1>
+      <p class="hero-subtitle">
+        Música en vivo, animación profesional y un show inolvidable diseñado para elevar tus celebraciones al siguiente nivel.
+      </p>
+      <div class="hero-actions">
+        <a href="https://wa.me/1234567890?text=Hola!%20Quiero%20reservar%20mi%20fecha" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Reserva tu Fecha Ahora
+        </a>
+        <a href="#paquetes" class="btn btn-ghost">
+          Ver Paquetes
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PACKAGES SECTION ===== -->
+  <section class="packages-section" id="paquetes">
+    <div class="container">
+      <div class="section-header">
+        <h2>Elige el Paquete Ideal para tu Fiesta</h2>
+      </div>
+      <div class="packages-grid">
+
+        <!-- EFICIENTE -->
+        <div class="package-card" id="pkg-eficiente">
+          <div class="package-icon-wrap">☀️</div>
+          <div class="package-tier">PAQUETE</div>
+          <div class="package-name">EFICIENTE</div>
+          <div class="package-price-wrap">
+            <span class="package-price">330</span>
+            <span class="package-currency">Soles</span>
+          </div>
+          <ul class="package-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Un músico profesional
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Conjunto rítmico
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Equipo de sonido
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Movilidad incluida
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Duración 5 horas
+            </li>
+          </ul>
+          <a href="https://wa.me/1234567890?text=Hola!%20Me%20interesa%20el%20paquete%20Eficiente" class="btn btn-ghost package-btn" target="_blank">Contratar Eficiente</a>
+        </div>
+
+        <!-- REGULAR -->
+        <div class="package-card" id="pkg-regular">
+          <div class="package-icon-wrap">💥</div>
+          <div class="package-tier">PAQUETE</div>
+          <div class="package-name">REGULAR</div>
+          <div class="package-price-wrap">
+            <span class="package-price">480</span>
+            <span class="package-currency">Soles</span>
+          </div>
+          <ul class="package-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Animador Profesional
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Un músico profesional
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Conjunto rítmico
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Equipo de sonido
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Duración 5 horas
+            </li>
+          </ul>
+          <a href="https://wa.me/1234567890?text=Hola!%20Me%20interesa%20el%20paquete%20Regular" class="btn btn-ghost package-btn" target="_blank">Contratar Regular</a>
+        </div>
+
+        <!-- PREMIUM -->
+        <div class="package-card popular" id="pkg-premium">
+          <div class="popular-badge">MAS POPULAR</div>
+          <div class="package-icon-wrap">🔥</div>
+          <div class="package-tier">PAQUETE</div>
+          <div class="package-name">PREMIUM</div>
+          <div class="package-price-wrap">
+            <span class="package-price" style="color:var(--primary);">650</span>
+            <span class="package-currency">Soles</span>
+          </div>
+          <ul class="package-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <strong>2 músicos profesionales</strong>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <strong>Animador Profesional</strong>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Movilidad propia
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Duración 5 horas
+            </li>
+          </ul>
+          <a href="https://wa.me/1234567890?text=Hola!%20Me%20interesa%20el%20paquete%20Premium" class="btn btn-primary package-btn" target="_blank">Contratar Premium</a>
+        </div>
+
+        <!-- GOLDEN -->
+        <div class="package-card" id="pkg-golden">
+          <div class="package-icon-wrap">👑</div>
+          <div class="package-tier">PAQUETE</div>
+          <div class="package-name">GOLDEN</div>
+          <div class="package-price-wrap">
+            <span class="package-price">820</span>
+            <span class="package-currency">Soles</span>
+          </div>
+          <ul class="package-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              3 músicos profesionales
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Animador Profesional
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Equipamiento impecable
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Duración 5 horas
+            </li>
+          </ul>
+          <a href="https://wa.me/1234567890?text=Hola!%20Me%20interesa%20el%20paquete%20Golden" class="btn btn-ghost package-btn" target="_blank">Contratar Golden</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHATSAPP BANNER ===== -->
+  <section class="whatsapp-banner" id="contacto">
+    <div class="container">
+      <h3>¿Dudas sobre qué paquete elegir?</h3>
+      <p>¡Escríbenos y te asesoramos gratis! Estamos listos para ayudarte a planificar la mejor música para tu gran día.</p>
+      <a href="https://wa.me/1234567890?text=Hola!%20Deseo%20asesor%C3%ADa%20sobre%20los%20paquetes" class="btn btn-whatsapp" target="_blank">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Chat con un Asesor
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-col-title">Orquesta Rítmica JR</div>
+          <p class="footer-desc">Llevando la mejor música y animación a todo el país. Calidad, puntualidad y elegancia en cada nota.</p>
+        </div>
+        <div>
+          <div class="footer-col-title">Enlaces Rápidos</div>
+          <ul class="footer-links">
+            <li><a href="#">Preguntas Frecuentes</a></li>
+            <li><a href="#">Términos de Servicio</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+            <li><a href="#contacto">Contacto Directo</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Redes Sociales</div>
+          <div class="social-icons">
+            <a href="#" class="social-btn" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.45A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Orquesta Rítmica JR. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
