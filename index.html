@@ -317,6 +317,7 @@
       background-position: center center;
       transform: scale(1.05);
       animation: heroZoom 20s ease-in-out infinite alternate;
+      filter: brightness(1.35);
     }
     @keyframes heroZoom { from { transform: scale(1.05); } to { transform: scale(1.12); } }
     .hero-overlay {
@@ -324,9 +325,9 @@
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(17, 19, 24, 0.4) 0%,
-        rgba(17, 19, 24, 0.6) 40%,
-        rgba(17, 19, 24, 0.9) 80%,
+        rgba(17, 19, 24, 0.15) 0%,
+        rgba(17, 19, 24, 0.4) 40%,
+        rgba(17, 19, 24, 0.8) 80%,
         #111318 100%
       );
     }
@@ -593,6 +594,386 @@
       .footer-grid { grid-template-columns: 1fr; gap: 48px; }
       .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
     }
+
+    /* ===== CHATBOT FAB & WINDOW ===== */
+    .chatbot-container {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 2000;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    
+    .chatbot-fab {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--rounded-full);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+      color: var(--on-primary);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 24px rgba(242, 202, 80, 0.4);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+      position: relative;
+    }
+    
+    .chatbot-fab:hover {
+      transform: scale(1.08) rotate(5deg);
+      box-shadow: 0 8px 32px rgba(242, 202, 80, 0.6);
+    }
+    
+    .chatbot-fab:focus-visible {
+      outline: 3px solid var(--secondary-container);
+      outline-offset: 3px;
+    }
+    
+    .chatbot-fab svg {
+      width: 26px;
+      height: 26px;
+      transition: transform 0.4s ease, opacity 0.3s ease;
+    }
+    
+    .chatbot-fab .icon-close {
+      position: absolute;
+      opacity: 0;
+      transform: scale(0.5) rotate(-90deg);
+    }
+    
+    .chatbot-container.open .chatbot-fab .icon-chat {
+      opacity: 0;
+      transform: scale(0.5) rotate(90deg);
+    }
+    
+    .chatbot-container.open .chatbot-fab .icon-close {
+      opacity: 1;
+      transform: scale(1) rotate(0);
+    }
+
+    .chatbot-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--tertiary-container);
+      color: var(--on-tertiary-container);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: var(--rounded-full);
+      border: 2px solid var(--background);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      animation: pulseBadge 2s infinite;
+    }
+
+    @keyframes pulseBadge {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    .chatbot-window {
+      position: absolute;
+      bottom: 76px;
+      right: 0;
+      width: 380px;
+      height: 520px;
+      background: rgba(30, 32, 36, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(153, 144, 124, 0.25);
+      border-radius: var(--rounded-xl);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+    }
+    
+    .chatbot-container.open .chatbot-window {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+    
+    /* Header */
+    .chatbot-header {
+      background: linear-gradient(to right, var(--surface-container-high), var(--surface-container-lowest));
+      border-bottom: 1px solid rgba(153, 144, 124, 0.15);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .chatbot-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .chatbot-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface-container-highest);
+      border: 2px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .chatbot-info-text {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .chatbot-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    
+    .chatbot-status {
+      font-size: 12px;
+      color: #25D366;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .chatbot-status::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: #25D366;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #25D366;
+    }
+    
+    .chatbot-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+      border-radius: var(--rounded-sm);
+    }
+    
+    .chatbot-close-btn:hover {
+      color: var(--primary);
+    }
+    
+    .chatbot-close-btn:focus-visible {
+      outline: 2px solid var(--primary);
+    }
+    
+    /* Body / Message Area */
+    .chatbot-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+    
+    /* Scrollbar */
+    .chatbot-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chatbot-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .chatbot-messages::-webkit-scrollbar-thumb {
+      background: var(--surface-container-highest);
+      border-radius: var(--rounded-full);
+    }
+    
+    /* Message bubbles */
+    .chat-bubble {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: var(--rounded-lg);
+      font-size: 14px;
+      line-height: 1.5;
+      animation: messageIn 0.3s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+      position: relative;
+      white-space: pre-line;
+    }
+    
+    .package-select-link {
+      color: var(--primary);
+      text-decoration: underline;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-block;
+      transition: color 0.2s;
+    }
+    
+    .package-select-link:hover {
+      color: #fff;
+    }
+    
+    @keyframes messageIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .chat-bubble-bot {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      border-bottom-left-radius: var(--rounded-sm);
+      align-self: flex-start;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .chat-bubble-user {
+      background: var(--primary-container);
+      color: var(--on-primary);
+      border-bottom-right-radius: var(--rounded-sm);
+      align-self: flex-end;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+    }
+    
+    /* Typing Indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-lg);
+      border-bottom-left-radius: var(--rounded-sm);
+      align-self: flex-start;
+      width: fit-content;
+      animation: messageIn 0.3s ease;
+    }
+    
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--outline);
+      border-radius: 50%;
+      animation: typingBounce 1.4s infinite ease-in-out both;
+    }
+    
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+    
+    /* Footer Options / Inputs */
+    .chatbot-footer {
+      padding: 16px 20px 20px;
+      border-top: 1px solid rgba(153, 144, 124, 0.15);
+      background: rgba(26, 28, 32, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .chatbot-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    
+    .option-btn {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface-container-high);
+      border: 1px solid rgba(153, 144, 124, 0.3);
+      border-radius: var(--rounded-md);
+      color: var(--on-surface);
+      font-size: 13.5px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    
+    .option-btn:hover {
+      background: rgba(242, 202, 80, 0.1);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .option-btn:focus-visible {
+      outline: 2px solid var(--primary);
+    }
+    
+    /* Form inputs for text entry in chat */
+    .chat-input-wrapper {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .chat-text-input {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--surface-container-lowest);
+      border: 1px solid rgba(153, 144, 124, 0.3);
+      border-radius: var(--rounded-md);
+      color: var(--on-surface);
+      font-size: 14px;
+      outline: none;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    
+    .chat-text-input:focus {
+      border-color: var(--primary);
+    }
+    
+    .chat-send-btn {
+      padding: 10px 16px;
+      background: var(--primary-container);
+      color: var(--on-primary);
+      border: none;
+      border-radius: var(--rounded-md);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 0.2s, background 0.2s;
+    }
+    
+    .chat-send-btn:hover {
+      background: var(--primary);
+      transform: scale(1.02);
+    }
+    
+    /* Responsiveness for chatbot */
+    @media (max-width: 480px) {
+      .chatbot-container {
+        bottom: 16px;
+        right: 16px;
+      }
+      .chatbot-window {
+        width: calc(100vw - 32px);
+        height: calc(100vh - 100px);
+        bottom: 72px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -648,11 +1029,11 @@
       </div>
       <div class="packages-grid">
 
-        <!-- EFICIENTE -->
-        <div class="package-card" id="pkg-eficiente">
+        <!-- REGULAR (S/. 330) -->
+        <div class="package-card" id="pkg-regular-330">
           <div class="package-icon-wrap">☀️</div>
           <div class="package-tier">PAQUETE</div>
-          <div class="package-name">EFICIENTE</div>
+          <div class="package-name">REGULAR</div>
           <div class="package-price-wrap">
             <span class="package-price">330</span>
             <span class="package-currency">Soles</span>
@@ -679,28 +1060,29 @@
               Duración 5 horas
             </li>
           </ul>
-          <a href="https://wa.me/1234567890?text=Hola!%20Me%20interesa%20el%20paquete%20Eficiente" class="btn btn-ghost package-btn" target="_blank">Contratar Eficiente</a>
+          <a href="javascript:void(0)" onclick="startQuoteForPackage('Regular')" class="btn btn-ghost package-btn">Contratar Regular</a>
         </div>
 
-        <!-- REGULAR -->
-        <div class="package-card" id="pkg-regular">
+        <!-- EFICIENTE (S/. 480) -->
+        <div class="package-card" id="pkg-eficiente-480">
           <div class="package-icon-wrap">💥</div>
           <div class="package-tier">PAQUETE</div>
-          <div class="package-name">REGULAR</div>
+          <div class="package-name">EFICIENTE</div>
           <div class="package-price-wrap">
             <span class="package-price">480</span>
             <span class="package-currency">Soles</span>
           </div>
+          <p style="font-size: 13px; color: var(--primary); margin-top: -8px; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; text-align: center;">Dos opciones disponibles:</p>
           <ul class="package-features">
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Animador Profesional
+              <span><strong>Opción A:</strong> 1 Animador + 1 Músico</span>
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Un músico profesional
+              <span><strong>Opción B:</strong> 2 Músicos</span>
             </li>
-            <li>
+            <li style="border-top: 1px dashed rgba(153, 144, 124, 0.2); padding-top: 8px; margin-top: 8px;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               Conjunto rítmico
             </li>
@@ -712,8 +1094,12 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               Duración 5 horas
             </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Movilidad incluida
+            </li>
           </ul>
-          <a href="https://wa.me/1234567890?text=Hola!%20Me%20interesa%20el%20paquete%20Regular" class="btn btn-ghost package-btn" target="_blank">Contratar Regular</a>
+          <a href="javascript:void(0)" onclick="startQuoteForPackage('Eficiente')" class="btn btn-ghost package-btn">Contratar Eficiente</a>
         </div>
 
         <!-- PREMIUM -->
@@ -737,14 +1123,22 @@
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Movilidad propia
+              Conjunto rítmico
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Equipo de sonido
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Movilidad incluida
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               Duración 5 horas
             </li>
           </ul>
-          <a href="https://wa.me/1234567890?text=Hola!%20Me%20interesa%20el%20paquete%20Premium" class="btn btn-primary package-btn" target="_blank">Contratar Premium</a>
+          <a href="javascript:void(0)" onclick="startQuoteForPackage('Premium')" class="btn btn-primary package-btn">Contratar Premium</a>
         </div>
 
         <!-- GOLDEN -->
@@ -759,7 +1153,11 @@
           <ul class="package-features">
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              3 músicos profesionales
+              <strong>Orquesta completa</strong>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <strong>3 músicos profesionales</strong>
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -767,14 +1165,18 @@
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Equipamiento impecable
+              Equipo de sonido
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               Duración 5 horas
             </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Movilidad incluida
+            </li>
           </ul>
-          <a href="https://wa.me/1234567890?text=Hola!%20Me%20interesa%20el%20paquete%20Golden" class="btn btn-ghost package-btn" target="_blank">Contratar Golden</a>
+          <a href="javascript:void(0)" onclick="startQuoteForPackage('Golden')" class="btn btn-ghost package-btn">Contratar Golden</a>
         </div>
       </div>
     </div>
@@ -785,7 +1187,7 @@
     <div class="container">
       <h3>¿Dudas sobre qué paquete elegir?</h3>
       <p>¡Escríbenos y te asesoramos gratis! Estamos listos para ayudarte a planificar la mejor música para tu gran día.</p>
-      <a href="https://wa.me/1234567890?text=Hola!%20Deseo%20asesor%C3%ADa%20sobre%20los%20paquetes" class="btn btn-whatsapp" target="_blank">
+      <a href="https://wa.me/51935243572?text=Hola!%20Deseo%20asesor%C3%ADa%20sobre%20los%20paquetes" class="btn btn-whatsapp" target="_blank">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Chat con un Asesor
       </a>
@@ -829,6 +1231,598 @@
       </div>
     </div>
   </footer>
+  <!-- ===== RESERVATION CHATBOT ===== -->
+  <div class="chatbot-container" id="chatbot-container">
+    <!-- FAB Button -->
+    <button 
+      class="chatbot-fab" 
+      id="chatbot-fab" 
+      aria-haspopup="dialog"
+      aria-expanded="false" 
+      aria-controls="chatbot-window"
+      aria-label="Abrir asistente de reservas de JR Orquesta"
+    >
+      <span class="chatbot-badge" id="chatbot-badge" aria-label="1 mensaje nuevo">1</span>
+      <!-- Chat Icon -->
+      <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <!-- Close Icon -->
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Chat Window -->
+    <div 
+      class="chatbot-window" 
+      id="chatbot-window" 
+      role="dialog" 
+      aria-modal="false" 
+      aria-label="Asistente de Reservas JR Orquesta"
+      tabindex="-1"
+    >
+      <!-- Chat Header -->
+      <div class="chatbot-header">
+        <div class="chatbot-profile">
+          <div class="chatbot-avatar" aria-hidden="true">👑</div>
+          <div class="chatbot-info-text">
+            <span class="chatbot-name" id="chatbot-title">Asistente JR</span>
+            <span class="chatbot-status">En línea</span>
+          </div>
+        </div>
+        <button class="chatbot-close-btn" id="chatbot-close" aria-label="Cerrar chat de reservas">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Chat Messages (Aria Live region for screen readers) -->
+      <div class="chatbot-messages" id="chatbot-messages" aria-live="polite" role="log">
+        <!-- Messages will be populated dynamically -->
+      </div>
+
+      <!-- Chat Footer / Quick Options -->
+      <div class="chatbot-footer" id="chatbot-footer">
+        <div class="chatbot-options" id="chatbot-options">
+          <!-- Dynamic options will appear here -->
+        </div>
+        <!-- Permanent Text Input for Custom User Messages -->
+        <div class="chat-input-wrapper" id="chat-custom-input-wrapper">
+          <input 
+            type="text" 
+            id="chat-custom-input" 
+            placeholder="Escribe tu consulta aquí..." 
+            class="chat-text-input"
+            aria-label="Escribe tu consulta o responde al asistente"
+          />
+          <button class="chat-send-btn" id="chat-custom-send" aria-label="Enviar mensaje">
+            Enviar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('chatbot-container');
+      const fab = document.getElementById('chatbot-fab');
+      const closeBtn = document.getElementById('chatbot-close');
+      const chatWindow = document.getElementById('chatbot-window');
+      const messagesContainer = document.getElementById('chatbot-messages');
+      const optionsContainer = document.getElementById('chatbot-options');
+      const badge = document.getElementById('chatbot-badge');
+
+      // Custom user text input elements
+      const customInputWrapper = document.getElementById('chat-custom-input-wrapper');
+      const customInput = document.getElementById('chat-custom-input');
+      const customSend = document.getElementById('chat-custom-send');
+
+      // Booking state
+      let state = {
+        step: 'init',
+        eventType: '',
+        date: '',
+        packageSelected: '',
+        userName: '',
+        userPhone: ''
+      };
+
+      // Toggle Chat window
+      const toggleChat = () => {
+        const isOpen = container.classList.toggle('open');
+        fab.setAttribute('aria-expanded', isOpen);
+        
+        if (isOpen) {
+          if (badge) {
+            badge.style.display = 'none';
+          }
+          // Focus the close button or first interactive element inside the window
+          setTimeout(() => {
+            chatWindow.focus();
+          }, 100);
+          
+          // Initialize conversation if empty
+          if (messagesContainer.children.length === 0) {
+            startChat();
+          }
+        } else {
+          fab.focus();
+        }
+      };
+
+      fab.addEventListener('click', toggleChat);
+      closeBtn.addEventListener('click', toggleChat);
+
+      // Event delegation for clickable package links inside bot messages
+      messagesContainer.addEventListener('click', (e) => {
+        const link = e.target.closest('.package-select-link');
+        if (link) {
+          e.preventDefault();
+          const pkgName = link.getAttribute('data-package');
+          
+          if (pkgName === 'Regular') {
+            state.packageSelected = 'Paquete Regular';
+            addMessage('Quiero cotizar: Paquete Regular (S/. 330)', false);
+            selectStartQuote();
+          } else if (pkgName === 'Eficiente') {
+            addMessage('Quiero cotizar: Paquete Eficiente (S/. 480)', false);
+            botReply('¿Qué opción del Paquete Eficiente deseas cotizar?', [
+              { text: 'Opción A (1 Animador + 1 Músico)', action: () => { state.packageSelected = 'Paquete Eficiente (Opción A: 1 Animador + 1 Músico)'; selectStartQuote(); } },
+              { text: 'Opción B (2 Músicos)', action: () => { state.packageSelected = 'Paquete Eficiente (Opción B: 2 Músicos)'; selectStartQuote(); } }
+            ]);
+          } else if (pkgName === 'Eficiente A') {
+            state.packageSelected = 'Paquete Eficiente (Opción A: 1 Animador + 1 Músico)';
+            addMessage('Quiero cotizar: Paquete Eficiente - Opción A (S/. 480)', false);
+            selectStartQuote();
+          } else if (pkgName === 'Eficiente B') {
+            state.packageSelected = 'Paquete Eficiente (Opción B: 2 Músicos)';
+            addMessage('Quiero cotizar: Paquete Eficiente - Opción B (S/. 480)', false);
+            selectStartQuote();
+          } else if (pkgName === 'Premium') {
+            state.packageSelected = 'Paquete Premium';
+            addMessage('Quiero cotizar: Paquete Premium (S/. 650)', false);
+            selectStartQuote();
+          } else if (pkgName === 'Golden') {
+            state.packageSelected = 'Paquete Golden (Orquesta Completa / 3 Músicos)';
+            addMessage('Quiero cotizar: Paquete Golden (S/. 820)', false);
+            selectStartQuote();
+          }
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && container.classList.contains('open')) {
+          toggleChat();
+        }
+      });
+
+      // Show typing indicator
+      const showTypingIndicator = () => {
+        const indicator = document.createElement('div');
+        indicator.className = 'typing-indicator';
+        indicator.id = 'typing-indicator';
+        indicator.innerHTML = `
+          <div class="typing-dot" aria-hidden="true"></div>
+          <div class="typing-dot" aria-hidden="true"></div>
+          <div class="typing-dot" aria-hidden="true"></div>
+        `;
+        messagesContainer.appendChild(indicator);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      };
+
+      const removeTypingIndicator = () => {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) {
+          indicator.remove();
+        }
+      };
+
+      // Add message bubble
+      const addMessage = (text, isBot = true) => {
+        const bubble = document.createElement('div');
+        bubble.className = `chat-bubble chat-bubble-${isBot ? 'bot' : 'user'}`;
+        bubble.innerHTML = text;
+        messagesContainer.appendChild(bubble);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      };
+
+      // Helper to show bot response with realistic delay
+      const botReply = (text, options = []) => {
+        showTypingIndicator();
+        setTimeout(() => {
+          removeTypingIndicator();
+          addMessage(text, true);
+          showOptions(options);
+        }, 1000);
+      };
+
+      // Show options in the footer
+      const showOptions = (options) => {
+        optionsContainer.innerHTML = '';
+        
+        if (options && options.length > 0) {
+          options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = opt.text;
+            btn.addEventListener('click', () => {
+              addMessage(opt.text, false);
+              opt.action();
+            });
+            optionsContainer.appendChild(btn);
+          });
+        }
+      };
+
+      // Configure input field based on state
+      const updateInputField = () => {
+        customInput.value = '';
+        if (state.step === 'date') {
+          customInput.type = 'date';
+          customInput.placeholder = 'Selecciona la fecha de tu evento...';
+          const today = new Date().toISOString().split('T')[0];
+          customInput.min = today;
+        } else if (state.step === 'time') {
+          customInput.type = 'time';
+          customInput.placeholder = 'Selecciona la hora de inicio...';
+          customInput.removeAttribute('min');
+        } else {
+          customInput.type = 'text';
+          customInput.removeAttribute('min');
+          
+          if (state.step === 'name') {
+            customInput.placeholder = 'Escribe tu nombre completo...';
+          } else {
+            customInput.placeholder = 'Escribe tu consulta aquí...';
+          }
+        }
+      };
+
+      // Handle user text submission
+      const handleInputSubmit = () => {
+        const text = customInput.value.trim();
+        if (!text) return;
+        
+        customInput.value = '';
+        addMessage(text, false);
+        
+        if (state.step === 'date') {
+          const formattedDate = text.split('-').reverse().join('/');
+          selectDate(formattedDate);
+        } else if (state.step === 'time') {
+          selectTime(text);
+        } else if (state.step === 'name') {
+          selectName(text);
+        } else {
+          processCustomQuery(text);
+        }
+      };
+
+      // Simple rule-based reply engine for custom user questions
+      const processCustomQuery = (query) => {
+        const q = query.toLowerCase();
+        
+        if ((q.includes('extra') || q.includes('adicional')) && (q.includes('precio') || q.includes('costo') || q.includes('cuanto') || q.includes('cobra') || q.includes('tarifa') || q.includes('valor') || q.includes('cuesta'))) {
+          faqReply('Sí, se pueden contratar horas adicionales coordinándolo durante el evento. Las tarifas por hora extra son:\n• Paquete Regular: +S/. 60\n• Paquete Eficiente: +S/. 90\n• Paquete Premium: +S/. 130\n• Paquete Golden: +S/. 160', showFAQ);
+        } else if (q.includes('precio') || q.includes('costo') || q.includes('paquet') || q.includes('cuanto cuesta') || q.includes('cuanto cobran') || q.includes('cobran') || q.includes('soles') || q.includes('tarifa') || q.includes('valor')) {
+          showPackagesInfo();
+        } else if (q.includes('disponib') || q.includes('cotiz') || q.includes('fecha') || q.includes('reserv')) {
+          selectStartQuote();
+        } else if (q.includes('contrato') || q.includes('firm') || q.includes('papel')) {
+          faqReply('No emitimos contratos formales, todo se maneja mediante acuerdo directo por WhatsApp y el recibo del abono.', showFAQ);
+        } else if (q.includes('cancel') || q.includes('posponer') || q.includes('cambiar fecha')) {
+          faqReply('El abono del 50% no es reembolsable. Se permite cambio de fecha sin costo por única vez sujeto a disponibilidad avisando con 15 días de anticipación.', showFAQ);
+        } else if (q.includes('anticip') || q.includes('antelacion')) {
+          faqReply('Se puede reservar con 1 o 2 semanas de anticipación, sujeto a la disponibilidad de la fecha.', showFAQ);
+        } else if (q.includes('cancion') || q.includes('musica') || q.includes('repertorio') || q.includes('tema')) {
+          faqReply('Sí, el cliente puede enviarnos una lista de sus canciones favoritas y momentos clave para el show.', showFAQ);
+        } else if (q.includes('corriente') || q.includes('luz') || q.includes('electric') || q.includes('enchufe')) {
+          faqReply('Solo requerimos una conexión eléctrica estable (220V) cercana al escenario y un espacio plano.', showFAQ);
+        } else if (q.includes('animador') || q.includes('maestro') || q.includes('protocolo') || q.includes('ceremonia')) {
+          faqReply('Sí, el animador está capacitado para dirigir el protocolo formal (palabras de bienvenida, brindis, etc.) si se coordina previamente.', showFAQ);
+        } else if (q.includes('provincia') || q.includes('viaje') || q.includes('fuera') || q.includes('viajar')) {
+          faqReply('Sí, realizamos shows fuera de Lima o provincias (el cliente cubre gastos adicionales de movilidad/viáticos).', showFAQ);
+        } else if (q.includes('extra') || q.includes('adicional')) {
+          faqReply('Sí, se pueden contratar horas adicionales coordinándolo durante el evento. Las tarifas por hora extra son:\n• Paquete Regular: +S/. 60\n• Paquete Eficiente: +S/. 90\n• Paquete Premium: +S/. 130\n• Paquete Golden: +S/. 160', showFAQ);
+        } else if (q.includes('navidad') || q.includes('año nuevo') || q.includes('madre') || q.includes('festiv') || q.includes('especial')) {
+          faqReply('En fechas especiales (Navidad, Año Nuevo, Día de la Madre, Fiestas Patrias) se aplica una tarifa festiva con recargo especial.', showFAQ);
+        } else if (q.includes('duracion') || q.includes('duran') || q.includes('hora') || q.includes('tiempo')) {
+          faqReply('Nuestros paquetes estándar (Regular, Premium y Golden) incluyen un servicio de hasta 5 horas continuas con breves intervalos coordinados.', showFAQ);
+        } else if (q.includes('sonido') || q.includes('equipo') || q.includes('parlante') || q.includes('microfono')) {
+          faqReply('Sí, todos nuestros paquetes (desde Regular hasta Golden) incluyen equipamiento completo de sonido adecuado para el aforo de tu evento.', showFAQ);
+        } else if (q.includes('movilidad') || q.includes('traslado')) {
+          faqReply('El costo de traslado está totalmente cubierto para Lima Metropolitana. Para eventos fuera de la zona urbana o provincias, se coordina un pequeño recargo de movilidad.', showFAQ);
+        } else if (q.includes('asesor') || q.includes('hablar') || q.includes('whatsapp') || q.includes('telefono') || q.includes('celular') || q.includes('humano')) {
+          speakToAdvisor();
+        } else {
+          botReply('Entendido. Para brindarte una respuesta precisa y formal a tu pregunta: "' + query + '", te recomiendo hablar directamente con un asesor o iniciar una cotización para tu contrato.', [
+            { text: '🟢 Hablar con Asesor en Vivo', action: speakToAdvisor },
+            { text: '📅 Iniciar Cotización', action: selectStartQuote },
+            { text: '🔄 Volver al menú', action: startChat }
+          ]);
+        }
+      };
+
+      customSend.addEventListener('click', handleInputSubmit);
+      customInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          handleInputSubmit();
+        }
+      });
+
+      // Start the conversation
+      const startChat = () => {
+        state = {
+          step: 'init',
+          eventType: '',
+          date: '',
+          eventTime: '',
+          packageSelected: '',
+          userName: '',
+          userPhone: ''
+        };
+        updateInputField();
+        botReply('¡Hola! 🎶 Te doy la bienvenida al asistente de reservas de Orquesta Rítmica JR. Estoy aquí para ayudarte a planificar tu evento ideal. ¿Cómo deseas iniciar el proceso de cotización o contrato hoy?', [
+          { text: '📅 Consultar disponibilidad y cotizar', action: selectStartQuote },
+          { text: '👑 Ver información de paquetes', action: showPackagesInfo },
+          { text: '❓ Preguntas frecuentes', action: showFAQ },
+          { text: '📞 Hablar con un asesor directo', action: speakToAdvisor }
+        ]);
+      };
+
+      // --- FLOWS ---
+
+      // Path: Cotizar Evento
+      function selectStartQuote() {
+        state.step = 'eventType';
+        updateInputField();
+        botReply('Excelente elección. Vamos a armar tu cotización en unos segundos. ¿De qué tipo de evento se trata?', [
+          { text: '💒 Boda / Matrimonio', action: () => selectEventType('Boda / Matrimonio') },
+          { text: '🎂 Cumpleaños / Fiesta Privada', action: () => selectEventType('Cumpleaños o Fiesta Privada') },
+          { text: '🏆 Evento Deportivo', action: () => selectEventType('Evento Deportivo') },
+          { text: '🎉 Otro tipo de fiesta', action: () => selectEventType('Otro tipo de fiesta') }
+        ]);
+      }
+
+      function selectEventType(type) {
+        state.eventType = type;
+        state.step = 'date';
+        updateInputField();
+        
+        botReply('Perfecto. ¿Para qué fecha estimada estás planeando tu evento? (Puedes elegirla usando el selector de fecha abajo o escribirla)');
+      }
+
+      function selectDate(dateStr) {
+        state.date = dateStr;
+        state.step = 'time';
+        updateInputField();
+        botReply('¡Excelente! ¿A qué hora iniciará el evento? Puedes seleccionar una de las opciones comunes abajo o usar el campo de entrada:', [
+          { text: '🕐 1:00 PM', action: () => selectTime('01:00 PM') },
+          { text: '🕓 4:00 PM', action: () => selectTime('04:00 PM') },
+          { text: '🕖 7:00 PM', action: () => selectTime('07:00 PM') },
+          { text: '🕘 9:00 PM', action: () => selectTime('09:00 PM') }
+        ]);
+      }
+
+      function selectTime(timeStr) {
+        state.eventTime = timeStr;
+        
+        if (state.packageSelected && state.packageSelected !== 'No decidido aún') {
+          state.step = 'name';
+          updateInputField();
+          botReply('Entendido. Procederemos con el ' + state.packageSelected + ' para tu contrato. Por favor, escribe tu nombre completo abajo para continuar:');
+          return;
+        }
+        
+        state.step = 'package';
+        updateInputField();
+        botReply('Entendido. ¿Qué paquete deseas contratar para tu evento en esa fecha y hora?', [
+          { text: '☀️ Paquete Regular (S/. 330)', action: () => selectPackage('Paquete Regular') },
+          { text: '💥 Paquete Eficiente A (1 Animador + 1 Músico - S/. 480)', action: () => selectPackage('Paquete Eficiente (Opción A: 1 Animador + 1 Músico)') },
+          { text: '🎵 Paquete Eficiente B (2 Músicos - S/. 480)', action: () => selectPackage('Paquete Eficiente (Opción B: 2 Músicos)') },
+          { text: '🔥 Paquete Premium (S/. 650)', action: () => selectPackage('Paquete Premium') },
+          { text: '👑 Paquete Golden (Orquesta Completa / 3 Músicos - S/. 820)', action: () => selectPackage('Paquete Golden (Orquesta Completa / 3 Músicos)') }
+        ]);
+      }
+
+      function selectPackage(pkg) {
+        state.packageSelected = pkg;
+        state.step = 'name';
+        updateInputField();
+        botReply('Casi terminamos. Por favor, escribe tu nombre completo abajo para continuar:');
+      }
+
+      function selectName(name) {
+        state.userName = name;
+        finishQuote();
+      }
+
+      function finishQuote() {
+        state.step = 'completed';
+        updateInputField();
+        
+        let pkgDisplay = state.packageSelected;
+        let pkgEmoji = '💥';
+        if (state.packageSelected === 'Paquete Regular') {
+          pkgDisplay = 'Regular (330 Soles - 1 Músico)';
+          pkgEmoji = '☀️';
+        } else if (state.packageSelected === 'Paquete Eficiente (Opción A: 1 Animador + 1 Músico)') {
+          pkgDisplay = 'Eficiente (480 Soles - 1 Músico + Animador)';
+          pkgEmoji = '💥';
+        } else if (state.packageSelected === 'Paquete Eficiente (Opción B: 2 Músicos)') {
+          pkgDisplay = 'Eficiente (480 Soles - 2 Músicos)';
+          pkgEmoji = '💥';
+        } else if (state.packageSelected === 'Paquete Premium') {
+          pkgDisplay = 'Premium (650 Soles - 2 Músicos + Animador)';
+          pkgEmoji = '🔥';
+        } else if (state.packageSelected === 'Paquete Golden (Orquesta Completa / 3 Músicos)') {
+          pkgDisplay = 'Golden (820 Soles - Orquesta Completa / 3 Músicos)';
+          pkgEmoji = '👑';
+        }
+
+        let eventEmoji = '🎉';
+        if (state.eventType.includes('Boda') || state.eventType.includes('Matrimonio')) eventEmoji = '💒';
+        if (state.eventType.includes('Cumpleaños') || state.eventType.includes('Fiesta')) eventEmoji = '🎂';
+        if (state.eventType.includes('Deportivo')) eventEmoji = '🏆';
+
+        // Format date to Spanish text
+        let dateDisplay = state.date;
+        if (state.date.includes('/')) {
+          const parts = state.date.split('/');
+          const day = parseInt(parts[0], 10);
+          const monthIndex = parseInt(parts[1], 10) - 1;
+          const year = parts[2];
+          const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+          if (monthIndex >= 0 && monthIndex < 12) {
+            dateDisplay = `${day} de ${months[monthIndex]} ${year}`;
+          }
+        }
+
+        const messageText = `✨ *PROPUESTA DE COTIZACIÓN - ORQUESTA RÍTMICA JR* 🎶\n\n` +
+          `👤 *Cliente:* ${state.userName}\n` +
+          `💍 *Evento:* ${state.eventType} ${eventEmoji}\n` +
+          `📅 *Fecha:* ${dateDisplay}\n` +
+          `🕒 *Hora:* ${state.eventTime}\n` +
+          `📍 *Ubicación:* Chimbote / Nvo Chimbote / Coishco / San Pedro (Movilidad Incluida) 🚗\n` +
+          `${pkgEmoji} *Paquete:* ${pkgDisplay}\n\n` +
+          `⚠️ *Nota importante:* Nuestros paquetes de show duran 5 horas. Llegamos 1 hora antes para montaje y prueba de sonido (sin costo). NO incluyen iluminación ni juego de luces. La reserva se realiza con el 50% de adelanto.`;
+        
+        const whatsappUrl = `https://wa.me/51935243572?text=${encodeURIComponent(messageText)}`;
+
+        botReply('¡Todo listo! He generado tu resumen de reserva. Haz clic en el botón de abajo para enviarlo directamente a nuestro WhatsApp y confirmar disponibilidad.', [
+          { text: '📲 Enviar cotización al WhatsApp +51 935243572', action: () => { window.open(whatsappUrl, '_blank'); resetChatOption(); } },
+          { text: '🔄 Empezar de nuevo', action: startChat }
+        ]);
+      }
+
+      function resetChatOption() {
+        state.step = 'init';
+        updateInputField();
+        botReply('¿Te puedo ayudar con algo más?', [
+          { text: '🔄 Volver al menú principal', action: startChat },
+          { text: '❌ Salir del chat', action: toggleChat }
+        ]);
+      }
+
+      // Path: Mostrar información de paquetes
+      function showPackagesInfo() {
+        botReply('Ofrecemos 4 paquetes para cada tipo de presupuesto (haz clic en el título o la opción de un paquete para elegirlo directamente):\n\n' +
+          '<a href="#" class="package-select-link" data-package="Regular">☀️ 1. REGULAR (S/. 330)</a>\n' +
+          '• 1 Músico profesional\n' +
+          '• Conjunto rítmico\n' +
+          '• Sonido completo\n' +
+          '• Movilidad incluida\n' +
+          '• Duración 5 horas\n\n' +
+          '<a href="#" class="package-select-link" data-package="Eficiente">💥 2. EFICIENTE (S/. 480)</a>\n' +
+          '• <a href="#" class="package-select-link" data-package="Eficiente A">Opción A: 1 Animador + 1 Músico</a>\n' +
+          '• <a href="#" class="package-select-link" data-package="Eficiente B">Opción B: 2 Músicos</a>\n' +
+          '• Ambos incluyen: Conjunto rítmico, sonido, movilidad y 5h de show.\n\n' +
+          '<a href="#" class="package-select-link" data-package="Premium">🔥 3. PREMIUM (S/. 650)</a>\n' +
+          '• 2 Músicos profesionales\n' +
+          '• Animador profesional\n' +
+          '• Conjunto rítmico\n' +
+          '• Equipo de sonido\n' +
+          '• Movilidad incluida\n' +
+          '• Duración 5 horas\n\n' +
+          '<a href="#" class="package-select-link" data-package="Golden">👑 4. GOLDEN (S/. 820)</a>\n' +
+          '• Orquesta completa\n' +
+          '• 3 Músicos profesionales\n' +
+          '• Animador profesional\n' +
+          '• Equipo de sonido\n' +
+          '• Movilidad incluida\n' +
+          '• Duración 5 horas', [
+            { text: '☀️ Cotizar Paquete Regular (S/. 330)', action: () => { state.packageSelected = 'Paquete Regular'; selectStartQuote(); } },
+            { text: '💥 Cotizar Paquete Eficiente (S/. 480)', action: () => {
+                botReply('¿Qué opción del Paquete Eficiente deseas cotizar?', [
+                  { text: 'Opción A (1 Animador + 1 Músico)', action: () => { state.packageSelected = 'Paquete Eficiente (Opción A: 1 Animador + 1 Músico)'; selectStartQuote(); } },
+                  { text: 'Opción B (2 Músicos)', action: () => { state.packageSelected = 'Paquete Eficiente (Opción B: 2 Músicos)'; selectStartQuote(); } }
+                ]);
+            } },
+            { text: '🔥 Cotizar Paquete Premium (S/. 650)', action: () => { state.packageSelected = 'Paquete Premium'; selectStartQuote(); } },
+            { text: '👑 Cotizar Paquete Golden (S/. 820)', action: () => { state.packageSelected = 'Paquete Golden (Orquesta Completa / 3 Músicos)'; selectStartQuote(); } },
+            { text: '🔄 Volver al menú principal', action: startChat }
+          ]);
+      }
+
+      // Path: Preguntas frecuentes
+      function showFAQ() {
+        botReply('Aquí tienes las respuestas a las dudas más comunes de nuestros clientes:', [
+          { text: '⏱️ ¿Cuánto duran las presentaciones?', action: () => faqReply('Nuestros paquetes estándar (Regular, Premium y Golden) incluyen un servicio de hasta 5 horas continuas con breves intervalos coordinados.', showFAQ) },
+          { text: '🚚 ¿Incluyen movilidad/traslado?', action: () => faqReply('Sí, el costo de traslado está totalmente cubierto para Lima Metropolitana. Para eventos fuera de la zona urbana o provincias, se coordina un pequeño recargo de movilidad.', showFAQ) },
+          { text: '💳 ¿Cómo se realiza la reserva?', action: () => faqReply('Puedes separar tu fecha abonando el 50% del paquete seleccionado mediante Yape, Plin o transferencia bancaria. El 50% restante se liquida al finalizar el evento.', showFAQ) },
+          { text: '✍️ ¿Emiten contrato formal?', action: () => faqReply('No emitimos contratos formales, todo se maneja mediante acuerdo directo por WhatsApp y el recibo del abono.', showFAQ) },
+          { text: '❌ ¿Qué pasa si cancelo o cambio de fecha?', action: () => faqReply('El abono del 50% no es reembolsable. Se permite cambio de fecha sin costo por única vez sujeto a disponibilidad avisando con 15 días de anticipación.', showFAQ) },
+          { text: '📅 ¿Con cuánta anticipación debo reservar?', action: () => faqReply('Se puede reservar con 1 o 2 semanas de anticipación, sujeto a la disponibilidad de la fecha.', showFAQ) },
+          { text: '🎵 ¿Podemos elegir canciones o repertorio?', action: () => faqReply('Sí, el cliente puede enviarnos una lista de sus canciones favoritas y momentos clave para el show.', showFAQ) },
+          { text: '🔌 ¿Qué requerimientos técnicos necesitan?', action: () => faqReply('Solo requerimos una conexión eléctrica estable (220V) cercana al escenario y un espacio plano.', showFAQ) },
+          { text: '🎤 ¿El animador hace de Maestro de Ceremonias?', action: () => faqReply('Sí, el animador está capacitado para dirigir el protocolo formal (palabras de bienvenida, brindis, etc.) si se coordina previamente.', showFAQ) },
+          { text: '✈️ ¿Realizan shows en provincias?', action: () => faqReply('Sí, realizamos shows fuera de Lima o provincias (el cliente cubre gastos adicionales de movilidad/viáticos).', showFAQ) },
+          { text: '➕ ¿Se pueden contratar horas extras?', action: () => faqReply('Sí, se pueden contratar horas adicionales coordinándolo durante el evento. Las tarifas por hora extra son:\n• Paquete Regular: +S/. 60\n• Paquete Eficiente: +S/. 90\n• Paquete Premium: +S/. 130\n• Paquete Golden: +S/. 160', showFAQ) },
+          { text: '⭐ ¿Cómo manejan fechas especiales (festivos)?', action: () => faqReply('En fechas especiales (Navidad, Año Nuevo, Día de la Madre, Fiestas Patrias) se aplica una tarifa festiva con recargo especial.', showFAQ) },
+          { text: '🔄 Volver al menú principal', action: startChat }
+        ]);
+      }
+
+      function faqReply(answer, backAction) {
+        botReply(answer, [
+          { text: '👈 Volver a Preguntas Frecuentes', action: backAction },
+          { text: '🔄 Ir al menú principal', action: startChat }
+        ]);
+      }
+
+      // Path: Hablar con asesor
+      function speakToAdvisor() {
+        const whatsappUrl = `https://wa.me/51935243572?text=Hola!%20Deseo%20hablar%20con%20un%20asesor%20sobre%20sus%20servicios%20musicales`;
+        botReply('¡Por supuesto! Puedes contactar a un asesor humano directamente vía WhatsApp presionando el siguiente botón:', [
+          { text: '🟢 Contactar Asesor en Vivo', action: () => { window.open(whatsappUrl, '_blank'); resetChatOption(); } },
+          { text: '🔄 Volver al menú principal', action: startChat }
+        ]);
+      }
+
+      // External trigger to start quote flow for specific package
+      window.startQuoteForPackage = (pkgName) => {
+        if (!container.classList.contains('open')) {
+          toggleChat();
+        }
+        
+        state = {
+          step: 'init',
+          eventType: '',
+          date: '',
+          eventTime: '',
+          packageSelected: '',
+          userName: '',
+          userPhone: ''
+        };
+        
+        if (pkgName === 'Regular') {
+          state.packageSelected = 'Paquete Regular';
+          addMessage('Quiero cotizar: Paquete Regular (S/. 330)', false);
+          selectStartQuote();
+        } else if (pkgName === 'Eficiente') {
+          addMessage('Quiero cotizar: Paquete Eficiente (S/. 480)', false);
+          botReply('¿Qué opción del Paquete Eficiente deseas cotizar?', [
+            { text: 'Opción A (1 Animador + 1 Músico)', action: () => { state.packageSelected = 'Paquete Eficiente (Opción A: 1 Animador + 1 Músico)'; selectStartQuote(); } },
+            { text: 'Opción B (2 Músicos)', action: () => { state.packageSelected = 'Paquete Eficiente (Opción B: 2 Músicos)'; selectStartQuote(); } }
+          ]);
+        } else if (pkgName === 'Premium') {
+          state.packageSelected = 'Paquete Premium';
+          addMessage('Quiero cotizar: Paquete Premium (S/. 650)', false);
+          selectStartQuote();
+        } else if (pkgName === 'Golden') {
+          state.packageSelected = 'Paquete Golden (Orquesta Completa / 3 Músicos)';
+          addMessage('Quiero cotizar: Paquete Golden (S/. 820)', false);
+          selectStartQuote();
+        }
+      };
+    });
+  </script>
 
 </body>
 </html>
